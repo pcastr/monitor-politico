@@ -5,9 +5,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "aiohttp>=3.11.11",
     "deltalake==0.21.0",
+    "lancedb>=0.18.0",
     "pandas>=2.2.3",
     "pydantic[email]>=2.10.5",
+    "pyspark>=3.5.4",
     "requests>=2.32.3",
 ]
 
@@ -29,3 +32,6 @@ select = ['I', 'F', 'E', 'W', 'PL', 'PT']
 [tool.ruff.format]
 preview = true
 quote-style = 'single'
+
+[tool.taskipy.tasks]
+run = 'uv run -m workflows.ingestion.IGTAO_API_DEPUTADOS'
