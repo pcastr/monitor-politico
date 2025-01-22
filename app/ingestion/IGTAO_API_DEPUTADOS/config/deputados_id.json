@@ -1,0 +1,183 @@
+{
+  "table": "deputados_por_id",
+  "description": "Tabela de dados dos deputados por id",
+  "full_tablename": "public.deputados_por_id",
+  "active": true,
+  "endpoint": [
+    {
+      "base_url": "https://dadosabertos.camara.leg.br/api/v2",
+      "url": "/deputados/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "array[integer]",
+          "required": true,
+          "description": "Número(s) identificador(es) de um deputado, separados por vírgulas.",
+          "default": []
+        }
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "source": "dados.cpf",
+      "alias": "deputado_cpf",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.dataFalecimento",
+      "alias": "deputado_data_falecimento",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.dataNascimento",
+      "alias": "deputado_data_nascimento",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.escolaridade",
+      "alias": "deputado_escolaridade",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.id",
+      "alias": "deputado_id",
+      "datatype": "int"
+    },
+    {
+      "source": "dados.municipioNascimento",
+      "alias": "deputado_municipio_nascimento",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.nomeCivil",
+      "alias": "deputado_nome_civil",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.redeSocial",
+      "alias": "deputado_rede_social",
+      "datatype": "list_str"
+    },
+    {
+      "source": "dados.sexo",
+      "alias": "deputado_sexo",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ufNascimento",
+      "alias": "deputado_uf_nascimento",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.uri",
+      "alias": "deputado_uri",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.urlWebsite",
+      "alias": "deputado_url_website",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimoStatus.condicaoEleitoral",
+      "alias": "ultimo_status_condicao_eleitoral",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimoStatus.data",
+      "alias": "ultimo_status_data",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimoStatus.descricaoStatus",
+      "alias": "ultimo_status_descricao_status",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimoStatus.email",
+      "alias": "ultimo_status_email",
+      "datatype": "email_str"
+    },
+    {
+      "source": "dados_ultimoStatus.id",
+      "alias": "ultimo_status_id",
+      "datatype": "int"
+    },
+    {
+      "source": "dados.ultimoStatus.idLegislatura",
+      "alias": "ultimo_status_id_legislatura",
+      "datatype": "int"
+    },
+    {
+      "source": "dados.ultimoStatus.nome",
+      "alias": "ultimo_status_nome",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimoStatus.nomeEleitoral",
+      "alias": "ultimo_status_nome_eleitoral",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimoStatus.siglaPartido",
+      "alias": "ultimo_status_sigla_partido",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimoStatus.siglaUf",
+      "alias": "ultimo_status_sigla_uf",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimoStatus.situacao",
+      "alias": "ultimo_status_situacao",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimoStatus.uri",
+      "alias": "ultimo_status_uri",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimoStatus.uriPartido",
+      "alias": "ultimo_status_uri_partido",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimoStatus.urlFoto",
+      "alias": "ultimo_status_url_foto",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimosStatus.gabinete.andar",
+      "alias": "gabinete_andar",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimosStatus.gabinete.email",
+      "alias": "gabinete_email",
+      "datatype": "email_str"
+    },
+    {
+      "source": "dados.ultimosStatus.gabinete.nome",
+      "alias": "gabinete_nome",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimosStatus.gabinete.predio",
+      "alias": "gabinete_predio",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimosStatus.gabinete.sala",
+      "alias": "gabinete_sala",
+      "datatype": "str"
+    },
+    {
+      "source": "dados.ultimosStatus.gabinete.telefone",
+      "alias": "gabinete_telefone",
+      "datatype": "str"
+    }
+  ]
+}
