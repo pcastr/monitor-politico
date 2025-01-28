@@ -1,7 +1,7 @@
 {
   "table": "deputados_por_id",
   "description": "Tabela de dados dos deputados por id",
-  "full_tablename": "public.deputados_por_id",
+  "full_table_name": "public.deputados_por_id",
   "active": true,
   "endpoint": [
     {
@@ -13,171 +13,207 @@
           "type": "array[integer]",
           "required": true,
           "description": "Número(s) identificador(es) de um deputado, separados por vírgulas.",
-          "default": []
+          "default": [
+            160527,
+            220574
+          ]
         }
-      ]
+      ],
+      "query_parameters": []
     }
   ],
   "fields": [
     {
       "source": "dados.cpf",
       "alias": "deputado_cpf",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Número do CPF do deputado"
     },
     {
       "source": "dados.dataFalecimento",
       "alias": "deputado_data_falecimento",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Data de falecimento do deputado (caso aplicável)"
     },
     {
       "source": "dados.dataNascimento",
       "alias": "deputado_data_nascimento",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Data de nascimento do deputado"
     },
     {
       "source": "dados.escolaridade",
       "alias": "deputado_escolaridade",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Nível de escolaridade do deputado"
     },
     {
       "source": "dados.id",
       "alias": "deputado_id",
-      "datatype": "int"
+      "datatype": "int",
+      "description": "Identificador único do deputado"
     },
     {
       "source": "dados.municipioNascimento",
       "alias": "deputado_municipio_nascimento",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Município de nascimento do deputado"
     },
     {
       "source": "dados.nomeCivil",
       "alias": "deputado_nome_civil",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Nome civil do deputado"
     },
     {
       "source": "dados.redeSocial",
       "alias": "deputado_rede_social",
-      "datatype": "list_str"
+      "datatype": "list[str]",
+      "description": "Redes sociais do deputado"
     },
     {
       "source": "dados.sexo",
       "alias": "deputado_sexo",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Sexo do deputado"
     },
     {
       "source": "dados.ufNascimento",
       "alias": "deputado_uf_nascimento",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Sigla da unidade federativa (estado) de nascimento do deputado"
     },
     {
       "source": "dados.uri",
       "alias": "deputado_uri",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "URI única que referencia o deputado"
     },
     {
       "source": "dados.urlWebsite",
       "alias": "deputado_url_website",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "URL do website oficial do deputado"
     },
     {
       "source": "dados.ultimoStatus.condicaoEleitoral",
       "alias": "ultimo_status_condicao_eleitoral",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Condição eleitoral atual do deputado"
     },
     {
       "source": "dados.ultimoStatus.data",
       "alias": "ultimo_status_data",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Data do último status eleitoral"
     },
     {
       "source": "dados.ultimoStatus.descricaoStatus",
       "alias": "ultimo_status_descricao_status",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Descrição do último status eleitoral do deputado"
     },
     {
       "source": "dados.ultimoStatus.email",
       "alias": "ultimo_status_email",
-      "datatype": "email_str"
+      "datatype": "str",
+      "description": "Email de contato do deputado no último status"
     },
     {
       "source": "dados_ultimoStatus.id",
       "alias": "ultimo_status_id",
-      "datatype": "int"
+      "datatype": "int",
+      "description": "Identificador único do último status eleitoral"
     },
     {
       "source": "dados.ultimoStatus.idLegislatura",
       "alias": "ultimo_status_id_legislatura",
-      "datatype": "int"
+      "datatype": "int",
+      "description": "Identificador da legislatura do último status"
     },
     {
       "source": "dados.ultimoStatus.nome",
       "alias": "ultimo_status_nome",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Nome do deputado no último status"
     },
     {
       "source": "dados.ultimoStatus.nomeEleitoral",
       "alias": "ultimo_status_nome_eleitoral",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Nome eleitoral do deputado no último status"
     },
     {
       "source": "dados.ultimoStatus.siglaPartido",
       "alias": "ultimo_status_sigla_partido",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Sigla do partido do deputado no último status"
     },
     {
       "source": "dados.ultimoStatus.siglaUf",
       "alias": "ultimo_status_sigla_uf",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Sigla da unidade federativa (estado) do deputado no último status"
     },
     {
       "source": "dados.ultimoStatus.situacao",
       "alias": "ultimo_status_situacao",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Situação do deputado no último status eleitoral"
     },
     {
       "source": "dados.ultimoStatus.uri",
       "alias": "ultimo_status_uri",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "URI única do último status eleitoral do deputado"
     },
     {
       "source": "dados.ultimoStatus.uriPartido",
       "alias": "ultimo_status_uri_partido",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "URI única do partido do deputado no último status"
     },
     {
       "source": "dados.ultimoStatus.urlFoto",
       "alias": "ultimo_status_url_foto",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "URL da foto do deputado no último status"
     },
     {
       "source": "dados.ultimosStatus.gabinete.andar",
       "alias": "gabinete_andar",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Andar do gabinete do deputado"
     },
     {
       "source": "dados.ultimosStatus.gabinete.email",
       "alias": "gabinete_email",
-      "datatype": "email_str"
+      "datatype": "email_str",
+      "description": "Email do gabinete do deputado"
     },
     {
       "source": "dados.ultimosStatus.gabinete.nome",
       "alias": "gabinete_nome",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Nome do gabinete do deputado"
     },
     {
       "source": "dados.ultimosStatus.gabinete.predio",
       "alias": "gabinete_predio",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Nome do prédio do gabinete do deputado"
     },
     {
       "source": "dados.ultimosStatus.gabinete.sala",
       "alias": "gabinete_sala",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Número da sala do gabinete do deputado"
     },
     {
       "source": "dados.ultimosStatus.gabinete.telefone",
       "alias": "gabinete_telefone",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Telefone do gabinete do deputado"
     }
   ]
 }

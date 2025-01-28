@@ -1,0 +1,579 @@
+[
+    {
+        "dados": {
+            "id": 160527,
+            "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/160527",
+            "nomeCivil": "AGUINALDO VELLOSO BORGES RIBEIRO",
+            "ultimoStatus": {
+                "id": 160527,
+                "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/160527",
+                "nome": "Aguinaldo Ribeiro",
+                "siglaPartido": "PP",
+                "uriPartido": null,
+                "siglaUf": "PB",
+                "idLegislatura": 57,
+                "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/160527.jpg",
+                "email": null,
+                "data": "2023-02-01",
+                "nomeEleitoral": "Aguinaldo Ribeiro",
+                "gabinete": {
+                    "nome": "735",
+                    "predio": "4",
+                    "sala": "735",
+                    "andar": "7",
+                    "telefone": "3215-5735",
+                    "email": "dep.aguinaldoribeiro@camara.leg.br"
+                },
+                "situacao": "Exercício",
+                "condicaoEleitoral": "Titular",
+                "descricaoStatus": null
+            },
+            "cpf": "51921146400",
+            "sexo": "M",
+            "urlWebsite": null,
+            "redeSocial": [
+                "https://twitter.com/depaguinaldo11",
+                "https://www.facebook.com/depaguinaldoribeiro",
+                "https://www.instagram.com/depaguinaldoribeiro"
+            ],
+            "dataNascimento": "1969-02-13",
+            "dataFalecimento": null,
+            "ufNascimento": "PB",
+            "municipioNascimento": "Campina Grande",
+            "escolaridade": "Pós-Graduação"
+        },
+        "links": [
+            {
+                "rel": "self",
+                "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/160527"
+            }
+        ]
+    },
+    {
+        "dados": {
+            "id": 220574,
+            "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/220574",
+            "nomeCivil": "GILBERTO GOMES DA SILVA",
+            "ultimoStatus": {
+                "id": 220574,
+                "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/220574",
+                "nome": "Cabo Gilberto Silva",
+                "siglaPartido": "PL",
+                "uriPartido": null,
+                "siglaUf": "PB",
+                "idLegislatura": 57,
+                "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/220574.jpg",
+                "email": null,
+                "data": "2023-02-01",
+                "nomeEleitoral": "Cabo Gilberto Silva",
+                "gabinete": {
+                    "nome": "350",
+                    "predio": "4",
+                    "sala": "350",
+                    "andar": "3",
+                    "telefone": "3215-5350",
+                    "email": "dep.cabogilbertosilva@camara.leg.br"
+                },
+                "situacao": "Exercício",
+                "condicaoEleitoral": "Titular",
+                "descricaoStatus": null
+            },
+            "cpf": "03183427400",
+            "sexo": "M",
+            "urlWebsite": null,
+            "redeSocial": [
+                "https://twitter.com/cabogilberto",
+                "https://www.facebook.com/CaboGilbertoSilva",
+                "https://www.instagram.com/CaboGilbertoSilva",
+                "https://youtube.com/cabogilberto"
+            ],
+            "dataNascimento": "1981-04-01",
+            "dataFalecimento": null,
+            "ufNascimento": "PB",
+            "municipioNascimento": "Santa Rita",
+            "escolaridade": "Superior"
+        },
+        "links": [
+            {
+                "rel": "self",
+                "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/220574"
+            }
+        ]
+    },
+    {
+        "dados": {
+            "id": 74467,
+            "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74467",
+            "nomeCivil": "DAMIÃO FELICIANO DA SILVA",
+            "ultimoStatus": {
+                "id": 74467,
+                "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74467",
+                "nome": "Damião Feliciano",
+                "siglaPartido": "UNIÃO",
+                "uriPartido": null,
+                "siglaUf": "PB",
+                "idLegislatura": 57,
+                "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74467.jpg",
+                "email": null,
+                "data": "2023-02-01",
+                "nomeEleitoral": "Damião Feliciano",
+                "gabinete": {
+                    "nome": "938",
+                    "predio": "4",
+                    "sala": "938",
+                    "andar": "9",
+                    "telefone": "3215-5938",
+                    "email": "dep.damiaofeliciano@camara.leg.br"
+                },
+                "situacao": "Exercício",
+                "condicaoEleitoral": "Titular",
+                "descricaoStatus": null
+            },
+            "cpf": "13932772415",
+            "sexo": "M",
+            "urlWebsite": null,
+            "redeSocial": [],
+            "dataNascimento": "1952-04-28",
+            "dataFalecimento": null,
+            "ufNascimento": "PB",
+            "municipioNascimento": "Campina Grande",
+            "escolaridade": "Mestrado"
+        },
+        "links": [
+            {
+                "rel": "self",
+                "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/74467"
+            }
+        ]
+    },
+    {
+        "dados": {
+            "id": 204394,
+            "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/204394",
+            "nomeCivil": "GERVÁSIO AGRIPINO MAIA",
+            "ultimoStatus": {
+                "id": 204394,
+                "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/204394",
+                "nome": "Gervásio Maia",
+                "siglaPartido": "PSB",
+                "uriPartido": null,
+                "siglaUf": "PB",
+                "idLegislatura": 57,
+                "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/204394.jpg",
+                "email": null,
+                "data": "2023-02-01",
+                "nomeEleitoral": "Gervásio Maia",
+                "gabinete": {
+                    "nome": "308",
+                    "predio": "4",
+                    "sala": "308",
+                    "andar": "3",
+                    "telefone": "3215-5308",
+                    "email": "dep.gervasiomaia@camara.leg.br"
+                },
+                "situacao": "Exercício",
+                "condicaoEleitoral": "Titular",
+                "descricaoStatus": null
+            },
+            "cpf": "88623327420",
+            "sexo": "M",
+            "urlWebsite": null,
+            "redeSocial": [
+                "https://twitter.com/gervasiomaia",
+                "https://www.facebook.com/gervasiomaiapb",
+                "https://www.instagram.com/gervasiomaia"
+            ],
+            "dataNascimento": "1975-04-14",
+            "dataFalecimento": null,
+            "ufNascimento": "SP",
+            "municipioNascimento": "São Paulo",
+            "escolaridade": "Superior"
+        },
+        "links": [
+            {
+                "rel": "self",
+                "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/204394"
+            }
+        ]
+    },
+    {
+        "dados": {
+            "id": 160674,
+            "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/160674",
+            "nomeCivil": "HUGO MOTTA WANDERLEY DA NÓBREGA",
+            "ultimoStatus": {
+                "id": 160674,
+                "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/160674",
+                "nome": "Hugo Motta",
+                "siglaPartido": "REPUBLICANOS",
+                "uriPartido": null,
+                "siglaUf": "PB",
+                "idLegislatura": 57,
+                "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/160674.jpg",
+                "email": null,
+                "data": "2023-02-01",
+                "nomeEleitoral": "Hugo Motta",
+                "gabinete": {
+                    "nome": "237",
+                    "predio": "4",
+                    "sala": "237",
+                    "andar": "2",
+                    "telefone": "3215-5237",
+                    "email": "dep.hugomotta@camara.leg.br"
+                },
+                "situacao": "Exercício",
+                "condicaoEleitoral": "Titular",
+                "descricaoStatus": null
+            },
+            "cpf": "04796249419",
+            "sexo": "M",
+            "urlWebsite": null,
+            "redeSocial": [],
+            "dataNascimento": "1989-09-11",
+            "dataFalecimento": null,
+            "ufNascimento": "PB",
+            "municipioNascimento": "João Pessoa",
+            "escolaridade": "Superior"
+        },
+        "links": [
+            {
+                "rel": "self",
+                "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/160674"
+            }
+        ]
+    },
+    {
+        "dados": {
+            "id": 74041,
+            "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74041",
+            "nomeCivil": "LUIZ ALBUQUERQUE COUTO",
+            "ultimoStatus": {
+                "id": 74041,
+                "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74041",
+                "nome": "Luiz Couto",
+                "siglaPartido": "PT",
+                "uriPartido": null,
+                "siglaUf": "PB",
+                "idLegislatura": 57,
+                "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74041.jpg",
+                "email": null,
+                "data": "2023-02-01",
+                "nomeEleitoral": "Luiz Couto",
+                "gabinete": {
+                    "nome": "442",
+                    "predio": "4",
+                    "sala": "442",
+                    "andar": "4",
+                    "telefone": "3215-5442",
+                    "email": "dep.luizcouto@camara.leg.br"
+                },
+                "situacao": "Exercício",
+                "condicaoEleitoral": "Titular",
+                "descricaoStatus": null
+            },
+            "cpf": "02043033468",
+            "sexo": "M",
+            "urlWebsite": null,
+            "redeSocial": [],
+            "dataNascimento": "1945-02-13",
+            "dataFalecimento": null,
+            "ufNascimento": "PB",
+            "municipioNascimento": "Soledade",
+            "escolaridade": "Superior"
+        },
+        "links": [
+            {
+                "rel": "self",
+                "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/74041"
+            }
+        ]
+    },
+    {
+        "dados": {
+            "id": 220585,
+            "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/220585",
+            "nomeCivil": "FRANCISCO EMERSON ASSIS DE LUCENA",
+            "ultimoStatus": {
+                "id": 220585,
+                "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/220585",
+                "nome": "Mersinho Lucena",
+                "siglaPartido": "PP",
+                "uriPartido": null,
+                "siglaUf": "PB",
+                "idLegislatura": 57,
+                "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/220585.jpg",
+                "email": null,
+                "data": "2024-10-31",
+                "nomeEleitoral": "Mersinho Lucena",
+                "gabinete": {
+                    "nome": "425",
+                    "predio": "4",
+                    "sala": "425",
+                    "andar": "4",
+                    "telefone": "3215-5425",
+                    "email": "dep.mersinholucena@camara.leg.br"
+                },
+                "situacao": "Exercício",
+                "condicaoEleitoral": "Titular",
+                "descricaoStatus": ""
+            },
+            "cpf": "03071906412",
+            "sexo": "M",
+            "urlWebsite": null,
+            "redeSocial": [],
+            "dataNascimento": "1981-02-08",
+            "dataFalecimento": null,
+            "ufNascimento": "PB",
+            "municipioNascimento": "João Pessoa",
+            "escolaridade": "Ensino Médio"
+        },
+        "links": [
+            {
+                "rel": "self",
+                "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/220585"
+            }
+        ]
+    },
+    {
+        "dados": {
+            "id": 220584,
+            "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/220584",
+            "nomeCivil": "CÁSSIO MURILO GALDINO DE ARAÚJO",
+            "ultimoStatus": {
+                "id": 220584,
+                "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/220584",
+                "nome": "Murilo Galdino",
+                "siglaPartido": "REPUBLICANOS",
+                "uriPartido": null,
+                "siglaUf": "PB",
+                "idLegislatura": 57,
+                "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/220584.jpg",
+                "email": null,
+                "data": "2023-02-01",
+                "nomeEleitoral": "Murilo Galdino",
+                "gabinete": {
+                    "nome": "815",
+                    "predio": "4",
+                    "sala": "815",
+                    "andar": "8",
+                    "telefone": "3215-5815",
+                    "email": "dep.murilogaldino@camara.leg.br"
+                },
+                "situacao": "Exercício",
+                "condicaoEleitoral": "Titular",
+                "descricaoStatus": null
+            },
+            "cpf": "03182571494",
+            "sexo": "M",
+            "urlWebsite": null,
+            "redeSocial": [
+                "https://twitter.com/Murilogaldinopb",
+                "https://www.facebook.com/murilogaldinopb"
+            ],
+            "dataNascimento": "1980-07-02",
+            "dataFalecimento": null,
+            "ufNascimento": "PB",
+            "municipioNascimento": "Pocinhos",
+            "escolaridade": "Superior"
+        },
+        "links": [
+            {
+                "rel": "self",
+                "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/220584"
+            }
+        ]
+    },
+    {
+        "dados": {
+            "id": 160629,
+            "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/160629",
+            "nomeCivil": "ROMERO RODRIGUES VEIGA",
+            "ultimoStatus": {
+                "id": 160629,
+                "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/160629",
+                "nome": "Romero Rodrigues",
+                "siglaPartido": "PODE",
+                "uriPartido": null,
+                "siglaUf": "PB",
+                "idLegislatura": 57,
+                "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/160629.jpg",
+                "email": null,
+                "data": "2023-02-01",
+                "nomeEleitoral": "Romero Rodrigues",
+                "gabinete": {
+                    "nome": "610",
+                    "predio": "4",
+                    "sala": "610",
+                    "andar": "6",
+                    "telefone": "3215-5610",
+                    "email": "dep.romerorodrigues@camara.leg.br"
+                },
+                "situacao": "Exercício",
+                "condicaoEleitoral": "Titular",
+                "descricaoStatus": null
+            },
+            "cpf": "45107793487",
+            "sexo": "M",
+            "urlWebsite": null,
+            "redeSocial": [
+                "https://twitter.com/romeropelapb",
+                "https://www.facebook.com/romerorodriguespb",
+                "https://www.instagram.com/romerorodriguespb",
+                "https://youtube.com/romerorodriguespb"
+            ],
+            "dataNascimento": "1966-01-09",
+            "dataFalecimento": null,
+            "ufNascimento": "PB",
+            "municipioNascimento": "Campina Grande",
+            "escolaridade": "Mestrado"
+        },
+        "links": [
+            {
+                "rel": "self",
+                "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/160629"
+            }
+        ]
+    },
+    {
+        "dados": {
+            "id": 160635,
+            "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/160635",
+            "nomeCivil": "RUY MANUEL CARNEIRO BARBOSA DE ACA BELCHIOR",
+            "ultimoStatus": {
+                "id": 160635,
+                "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/160635",
+                "nome": "Ruy Carneiro",
+                "siglaPartido": "PODE",
+                "uriPartido": null,
+                "siglaUf": "PB",
+                "idLegislatura": 57,
+                "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/160635.jpg",
+                "email": null,
+                "data": "2024-10-16",
+                "nomeEleitoral": "Ruy Carneiro",
+                "gabinete": {
+                    "nome": "536",
+                    "predio": "4",
+                    "sala": "536",
+                    "andar": "5",
+                    "telefone": "3215-5536",
+                    "email": "dep.ruycarneiro@camara.leg.br"
+                },
+                "situacao": "Exercício",
+                "condicaoEleitoral": "Titular",
+                "descricaoStatus": ""
+            },
+            "cpf": "01859237711",
+            "sexo": "M",
+            "urlWebsite": null,
+            "redeSocial": [
+                "https://twitter.com/ruycarneiropb",
+                "https://www.facebook.com/ruycarneiropb",
+                "https://www.instagram.com/ruy.carneiro"
+            ],
+            "dataNascimento": "1970-08-17",
+            "dataFalecimento": null,
+            "ufNascimento": "PB",
+            "municipioNascimento": "João Pessoa",
+            "escolaridade": "Superior"
+        },
+        "links": [
+            {
+                "rel": "self",
+                "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/160635"
+            }
+        ]
+    },
+    {
+        "dados": {
+            "id": 74043,
+            "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74043",
+            "nomeCivil": "JOSÉ WELLINGTON ROBERTO",
+            "ultimoStatus": {
+                "id": 74043,
+                "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74043",
+                "nome": "Wellington Roberto",
+                "siglaPartido": "PL",
+                "uriPartido": null,
+                "siglaUf": "PB",
+                "idLegislatura": 57,
+                "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74043.jpg",
+                "email": null,
+                "data": "2023-02-01",
+                "nomeEleitoral": "Wellington Roberto",
+                "gabinete": {
+                    "nome": "514",
+                    "predio": "4",
+                    "sala": "514",
+                    "andar": "5",
+                    "telefone": "3215-5514",
+                    "email": "dep.wellingtonroberto@camara.leg.br"
+                },
+                "situacao": "Exercício",
+                "condicaoEleitoral": "Titular",
+                "descricaoStatus": null
+            },
+            "cpf": "26254166453",
+            "sexo": "M",
+            "urlWebsite": null,
+            "redeSocial": [],
+            "dataNascimento": "1959-05-19",
+            "dataFalecimento": null,
+            "ufNascimento": "PB",
+            "municipioNascimento": "São José de Piranhas",
+            "escolaridade": "Superior Incompleto"
+        },
+        "links": [
+            {
+                "rel": "self",
+                "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/74043"
+            }
+        ]
+    },
+    {
+        "dados": {
+            "id": 74044,
+            "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74044",
+            "nomeCivil": "JOSÉ WILSON SANTIAGO",
+            "ultimoStatus": {
+                "id": 74044,
+                "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74044",
+                "nome": "Wilson Santiago",
+                "siglaPartido": "REPUBLICANOS",
+                "uriPartido": null,
+                "siglaUf": "PB",
+                "idLegislatura": 57,
+                "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74044.jpg",
+                "email": null,
+                "data": "2024-05-09",
+                "nomeEleitoral": "Wilson Santiago",
+                "gabinete": {
+                    "nome": "534",
+                    "predio": "4",
+                    "sala": "534",
+                    "andar": "5",
+                    "telefone": "3215-5534",
+                    "email": "dep.wilsonsantiago@camara.leg.br"
+                },
+                "situacao": "Exercício",
+                "condicaoEleitoral": "Titular",
+                "descricaoStatus": ""
+            },
+            "cpf": "16159977415",
+            "sexo": "M",
+            "urlWebsite": null,
+            "redeSocial": [],
+            "dataNascimento": "1957-06-10",
+            "dataFalecimento": null,
+            "ufNascimento": "PB",
+            "municipioNascimento": "Uiraúna",
+            "escolaridade": "Superior"
+        },
+        "links": [
+            {
+                "rel": "self",
+                "href": "https://dadosabertos.camara.leg.br/api/v2/deputados/74044"
+            }
+        ]
+    }
+]

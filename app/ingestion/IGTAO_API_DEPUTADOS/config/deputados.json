@@ -1,93 +1,96 @@
 {
   "table": "deputados",
-  "comment": "Tabela de deputados",
-  "full_tablename": "public.deputados",
+  "description": "Tabela de deputados",
+  "full_table_name": "public.deputados",
   "active": true,
   "endpoint": [
     {
       "base_url": "https://dadosabertos.camara.leg.br/api/v2",
       "url": "/deputados",
-      "parameters": [
+      "parameters": [],
+      "query_parameters": [
         {
           "name": "id",
-          "type": "array[integer]",
+          "type": "list[int]",
           "required": false,
           "description": "Número(s) identificador(es) de um deputado, separados por vírgulas.",
           "default": []
         },
         {
           "name": "nome",
-          "type": "string",
+          "type": "str",
           "required": false,
           "description": "Parte do nome parlamentar.",
           "default": ""
         },
         {
           "name": "idLegislatura",
-          "type": "array[integer]",
+          "type": "list[int]",
           "required": false,
           "description": "Número(s) identificador(es) de uma ou mais legislatura(s), separados por vírgulas.",
           "default": []
         },
         {
           "name": "siglaUf",
-          "type": "array[string]",
+          "type": "list[str]",
           "required": false,
           "description": "Siglas de unidades federativas (estados e Distrito Federal).",
-          "default": []
+          "default": [
+            "PB"
+          ]
         },
         {
           "name": "siglaPartido",
-          "type": "array[string]",
+          "type": "list[str]",
           "required": false,
           "description": "Siglas de partidos aos quais os deputados são filiados.",
           "default": []
         },
         {
           "name": "siglaSexo",
-          "type": "string",
+          "type": "str",
           "required": false,
           "description": "Gênero dos parlamentares (M para masculino e F para feminino).",
           "default": ""
         },
         {
           "name": "pagina",
-          "type": "integer",
+          "type": "int",
           "required": false,
           "description": "Número da página de resultados (a partir de 1).",
           "default": 1
         },
         {
           "name": "itens",
-          "type": "integer",
+          "type": "int",
           "required": false,
           "description": "Número máximo de itens por página.",
           "default": 100
         },
         {
           "name": "dataInicio",
-          "type": "string",
+          "type": "str",
           "required": false,
           "description": "Data de início de um intervalo de tempo no formato AAAA-MM-DD.",
           "default": ""
         },
         {
           "name": "dataFim",
-          "type": "string",
+          "type": "str",
           "required": false,
           "description": "Data de término de um intervalo de tempo no formato AAAA-MM-DD.",
           "default": ""
         },
         {
           "name": "ordem",
-          "type": "string",
+          "type": "str",
           "required": false,
           "description": "Sentido da ordenação: asc (crescente) ou desc (decrescente).",
           "default": "asc"
         },
         {
           "name": "ordenarPor",
-          "type": "string",
+          "type": "str",
           "required": false,
           "description": "Campo pelo qual a lista deve ser ordenada: id, idLegislatura, nome, siglaUF ou siglaPartido.",
           "default": "nome"
@@ -99,42 +102,50 @@
     {
       "source": "dados.id",
       "alias": "deputado_id",
-      "datatype": "int"
+      "datatype": "int",
+      "description": "Identificador único do deputado"
     },
     {
       "source": "dados.uri",
       "alias": "deputado_uri",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "URI única que referencia o deputado"
     },
     {
       "source": "dados.nome",
       "alias": "deputado_nome_completo",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Nome completo do deputado"
     },
     {
       "source": "dados.siglaPartido",
       "alias": "partido_sigla",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Sigla do partido do deputado"
     },
     {
       "source": "dados.uriPartido",
       "alias": "partido_uri",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "URI única que referencia o partido do deputado"
     },
     {
       "source": "dados.siglaUf",
       "alias": "unidade_federativa_sigla",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Sigla da unidade federativa (estado) do deputado"
     },
     {
       "source": "dados.idLegislatura",
       "alias": "legislatura_id",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "Identificador da legislatura à qual o deputado pertence"
     },
     {
       "source": "dados.urlFoto",
       "alias": "foto_url",
-      "datatype": "str"
+      "datatype": "str",
+      "description": "URL da foto do deputado"
     }
   ]
 }
