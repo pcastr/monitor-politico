@@ -101,49 +101,49 @@
   ],
   "fields": [
     {
-      "source": "dados.id",
+      "source": "id",
       "alias": "deputado_id",
       "datatype": "int",
       "description": "Identificador único do deputado"
     },
     {
-      "source": "dados.uri",
+      "source": "uri",
       "alias": "deputado_uri",
       "datatype": "str",
       "description": "URI única que referencia o deputado"
     },
     {
-      "source": "dados.nome",
+      "source": "nome",
       "alias": "deputado_nome_completo",
       "datatype": "str",
       "description": "Nome completo do deputado"
     },
     {
-      "source": "dados.siglaPartido",
+      "source": "siglaPartido",
       "alias": "partido_sigla",
       "datatype": "str",
       "description": "Sigla do partido do deputado"
     },
     {
-      "source": "dados.uriPartido",
+      "source": "uriPartido",
       "alias": "partido_uri",
       "datatype": "str",
       "description": "URI única que referencia o partido do deputado"
     },
     {
-      "source": "dados.siglaUf",
+      "source": "siglaUf",
       "alias": "unidade_federativa_sigla",
       "datatype": "str",
       "description": "Sigla da unidade federativa (estado) do deputado"
     },
     {
-      "source": "dados.idLegislatura",
+      "source": "idLegislatura",
       "alias": "legislatura_id",
       "datatype": "str",
       "description": "Identificador da legislatura à qual o deputado pertence"
     },
     {
-      "source": "dados.urlFoto",
+      "source": "urlFoto",
       "alias": "foto_url",
       "datatype": "str",
       "description": "URL da foto do deputado"

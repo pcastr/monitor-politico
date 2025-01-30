@@ -1,10 +1,9 @@
 import json
 import logging
+import os
 import sys
-import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
 
 import requests
 
@@ -56,7 +55,12 @@ def build_url(log, config: dict, path_params=None, extra_query_params=None):
     try:
         base_url = config['endpoint'][0]['base_url']
         url = config['endpoint'][0]['url'].format(**(path_params or {}))
-        query_params = config['endpoint'][0].get('query_parameters', {})
+        query_params_list = config['endpoint'][0].get('query_parameters', [])
+
+        query_params = {
+            param['name']: param.get('default', [])
+            for param in query_params_list
+        }
 
         formatted_query_params = {
             k: ','.join(map(str, v)) if isinstance(v, list) else v
@@ -139,9 +143,8 @@ def fetch_records_paginated(log, config_table: dict):
 
                     return filtered_records
 
-                # Caso contrário, ir para a próxima página
                 pagina += 1
-                break  # Para tentar novamente no caso de erro de requisição
+                break
 
             except requests.exceptions.RequestException as e:
                 log.error('Erro na requisição: %s', e)
@@ -163,6 +166,27 @@ def extract_table(config_table: dict, extraction_date: datetime, log):
     return data
 
 
+def save_to_json(data, file_name, table_name, log):
+    """Salva os dados em um arquivo JSON."""
+    try:
+        # Criar diretório, caso não exista
+        os.makedirs('../../../data/deputados/PB/', exist_ok=True)
+        file_path = os.path.join('../../../data/deputados/PB/', file_name)
+
+        # Converter a string de dados para uma lista de objetos JSON
+        records = [
+            json.loads(line) for line in data.split('\n') if line.strip()
+        ]
+
+        # Salvar a lista no arquivo JSON
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(records, f, ensure_ascii=False, indent=4)
+
+        log.info(f'{table_name} - Dados salvos em: {file_path}')
+    except Exception as e:
+        log.error(f'{table_name} - Erro ao salvar os dados em JSON: {e}')
+
+
 def run_pipeline(config_path: str, log):
     """Executa a pipeline baseada nas configurações carregadas."""
     log.debug('Carregando configurações da tabela %s', config_path)
@@ -179,7 +203,12 @@ def run_pipeline(config_path: str, log):
         log.debug(f'{table_name} - Extraindo dados.')
         data = extract_table(config_table, extraction_date, log)
 
-        # TODO: adicionar upload_to_blob(data, blob_name, log)
+        file_name = (
+            f'API_DEPT_{table_name}_'
+            f'{extraction_date.strftime("%Y%m%d")}_'
+            f'{datetime.now().strftime("%Y%m%d_%H%M%S")}.json'
+        )
+        save_to_json(data, file_name, table_name, log)
 
     else:
         log.warning(
