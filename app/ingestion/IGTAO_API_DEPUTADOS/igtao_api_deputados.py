@@ -1,144 +1,115 @@
 import json
 import logging
-import os
 import sys
 import time
-from http import HTTPStatus
+from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional
 
-import pandas as pd
 import requests
-from pandas import json_normalize
 
-DEFAULT_TIMEOUT = 10
-DEFAULT_RETRIES = 5
-DEFAULT_BACKOFF_FACTOR = 1
+DEFAULT_TIMEOUT = 9
+DEFAULT_RETRIES = 4
+DEFAULT_BACKOFF_FACTOR = 0
 
 
-def list_config_files() -> list:
+def setup_logging():
+    """Configura o sistema de logging."""
+    log = logging.getLogger('api-deputados')
+    log.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler()
+    handler.setFormatter(
+        logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    )
+
+    log.addHandler(handler)
+    return log
+
+
+def parse_argument() -> str:
+    """Obtém o argumento passado via linha de comando."""
+    print(f'Parâmetros: {sys.argv}')
+    if len(sys.argv) > 1:
+        return sys.argv[1]
+    return None
+
+
+def list_config_files(table_name: str) -> str:
+    """Busca o JSON de configuração correspondente ao nome da tabela."""
     config_path = Path('config')
-    json_files = [str(file) for file in config_path.glob('*.json')]
-    if not json_files:
-        raise FileNotFoundError(
-            'Nenhum arquivo de configuração JSON foi encontrado na pasta.'
-        )
+    json_files = [str(file) for file in config_path.glob(f'{table_name}.json')]
 
-    return json_files
+    if len(json_files) == 1:
+        return json_files[0]
+
+    return None
 
 
 def load_config_file(config_file: str) -> dict:
-    """Carrega o arquivo de configuraçãõ JSON."""
-
+    """Carrega o conteúdo de um arquivo JSON de configuração."""
     with open(config_file, 'r', encoding='utf-8') as file:
-        config = json.load(file)
-    return config
+        return json.load(file)
 
 
-def validate_config(config: dict, log):
-    """Valida a configuração carregada."""
+def build_url(log, config: dict, path_params=None, extra_query_params=None):
+    try:
+        base_url = config['endpoint'][0]['base_url']
+        url = config['endpoint'][0]['url'].format(**(path_params or {}))
+        query_params = config['endpoint'][0].get('query_parameters', {})
 
-    required_keys = [
-        'table',
-        'description',
-        'full_table_name',
-        'active',
-        'endpoint',
-    ]
+        formatted_query_params = {
+            k: ','.join(map(str, v)) if isinstance(v, list) else v
+            for k, v in query_params.items()
+            if v not in [None, '', []]  # Ignora valores vazios
+        }
 
-    for key in required_keys:
-        if key not in config:
-            log.error(f'Configuração inválida: chave "{key}" ausente.')
-            raise ValueError(f'Configuração inválida: chave "{key}" ausente.')
+        if extra_query_params:
+            for k, v in extra_query_params.items():
+                if v not in [None, '', []]:
+                    if isinstance(v, list):
+                        formatted_query_params[k] = ','.join(map(str, v))
+                    else:
+                        formatted_query_params[k] = v
 
+        query_string = '&'.join(
+            f'{k}={v}' for k, v in formatted_query_params.items()
+        )
 
-def build_url(
-    config: dict, table_name: str, log, path_params=None, query_params=None
-):
-    base_url = config['endpoint'][0].get('base_url')
-    url = config['endpoint'][0].get('url')
-
-    full_url = f'{base_url}{url}'
-
-    if path_params:
-        try:
-            full_url = full_url.format(**path_params)
-        except KeyError as e:
-            log.error('Chave de parâmetro ausente no path_params: %s', e)
-
-    if query_params:
-        query_string = []
-        for key, value in query_params.items():
-            processed_value = (
-                ','.join(map(str, value)) if isinstance(value, list) else value
-            )
-            if processed_value:
-                query_string.append(f'{key}={processed_value}')
+        full_url = f'{base_url}{url}'
         if query_string:
-            full_url = f'{full_url}?{"&".join(query_string)}'
+            full_url += f'?{query_string}'
 
-    return full_url
-
-
-def get_url_with_query_params(config: dict, table_name: str, log):
-    query_params = config['endpoint'][0].get('query_parameters', [])
-
-    if not query_params:
-        log.info('Nenhum parâmetro de consulta encontrado.')
-
-    query_string = []
-    for param in query_params:
-        param_name = param.get('name')
-        param_value = param.get('default')
-        if param_value:
-            query_string.append(f'{param_name}={param_value}')
-            log.debug(
-                f'{table_name} - '
-                f'Parâmetro de consulta adicionado: '
-                f'{param_name}={param_value}'
-            )
-        else:
-            # log.warning(
-            #     f'Tabela: {table_name} - '
-            #     f'Parâmetro {param_name} não tem valor default.'
-            # )
-            pass
-
-    query_params_dict = {
-        param.get('name'): param.get('default')
-        for param in query_params
-        if param.get('default') is not None
-    }
-
-    url = build_url(
-        config,
-        table_name,
-        log,
-        query_params=query_params_dict if query_params_dict else None,
-    )
-
-    return url
+        log.info(f'{config["table"]} - Url criada : {full_url}')
+        return full_url
+    except KeyError as e:
+        if log:
+            log.error('Erro na configuração do endpoint: %s', e)
+        raise ValueError(f'Configuração inválida: {e}')
 
 
-def fetch_paginated_records(
-    url,
-    log,
-    key_data: str,
-    table_name: str,
-    retries=DEFAULT_RETRIES,
-    backoff_factor=DEFAULT_BACKOFF_FACTOR,
-):
-    """Realiza requisições paginadas a um endpoint."""
+def fetch_records_paginated(log, config_table: dict):
     all_records = []
-    next_page = url
+    table_name = config_table.get('table')
+    source_fields = [f['source'].strip() for f in config_table['fields']]
 
-    while next_page:
-        for attempt in range(retries):
+    pagina = 1
+    itens = 1000
+
+    while True:
+        extra_params = {
+            'itens': itens,
+            'pagina': pagina,
+        }
+        url = build_url(log, config_table, extra_query_params=extra_params)
+
+        for attempt in range(DEFAULT_RETRIES):
             try:
-                response = requests.get(next_page, timeout=DEFAULT_TIMEOUT)
+                response = requests.get(url, timeout=DEFAULT_TIMEOUT)
                 response.raise_for_status()
-                data = response.json()
+                response_data = response.json()
 
-                records = data.get(key_data, [])
+                records = response_data.get(config_table['key_data'], [])
                 all_records.extend(records)
 
                 log.info(
@@ -146,213 +117,95 @@ def fetch_paginated_records(
                     len(all_records),
                 )
 
-                next_page_link = next(
-                    (
-                        link['href']
-                        for link in data.get('links', [])
-                        if link['rel'] == 'next'
-                    ),
-                    None,
-                )
+                if len(records) < itens:
+                    log.info(f'{table_name} - Última página alcançada.')
+                    if isinstance(all_records, list):
+                        filtered_records = [
+                            {
+                                key: item.get(key)
+                                for key in source_fields
+                                if key in item
+                            }
+                            for item in all_records
+                        ]
+                    elif isinstance(all_records, dict):
+                        filtered_records = {
+                            key: all_records.get(key)
+                            for key in source_fields
+                            if key in all_records
+                        }
+                    else:
+                        filtered_records = all_records
 
-                if next_page_link:
-                    next_page = next_page_link
-                    log.info(
-                        f'{table_name} - Página processada com sucesso: %s',
-                        next_page,
-                    )
-                else:
-                    next_page = None
-                    log.info(f'{table_name} - Última página processada.')
+                    return filtered_records
 
-                break
+                # Caso contrário, ir para a próxima página
+                pagina += 1
+                break  # Para tentar novamente no caso de erro de requisição
 
             except requests.exceptions.RequestException as e:
-                if attempt < retries - 1:
-                    sleep_time = backoff_factor * (2**attempt)
-                    log.warning(
-                        'Erro ao buscar registros: %s. Tentativa %d em %d...',
-                        e,
-                        attempt + 1,
-                        retries,
-                    )
-                    time.sleep(sleep_time)
-                else:
-                    log.error(
-                        'Erro ao buscar registros após %d tentativas: %s',
-                        retries,
-                        e,
-                    )
-                    raise
-
-    return all_records
+                log.error('Erro na requisição: %s', e)
+                break
 
 
-def get_deputados(
-    log,
-    config: dict,
-    table_name: str,
-    config_table_path: str,
-    key_data='dados',
-):
-    log.debug(
-        f'{table_name} - Chamando com os parâmetros:'
-        f'config_file_path={config_table_path}'
-    )
-
-    url = get_url_with_query_params(config, table_name, log)
-
+def extract_table(config_table: dict, extraction_date: datetime, log):
     try:
-        records = fetch_paginated_records(
-            url, log, key_data=key_data, table_name=table_name
+        records = fetch_records_paginated(
+            log,
+            config_table,
         )
-        log.info(f'{table_name} - Registros obtidos: {len(records)}')
-        return records
+
     except Exception as e:
-        log.error(f'{table_name} - Erro ao buscar registros: {e}')
-        return None
+        log.error(f'{config_table["table"]} - Erro ao buscar registros: {e}')
+
+    log.info(f'{config_table["table"]} - Registros extraídos: {len(records)}')
+    data = '\n'.join([json.dumps(row) for row in records])
+    return data
 
 
-def fetch_records_by_ids(
-    config_data: dict,
-    list_ids,
-    table_name: str,
-    log,
-):
-    all_records = []
+def run_pipeline(config_path: str, log):
+    """Executa a pipeline baseada nas configurações carregadas."""
+    log.debug('Carregando configurações da tabela %s', config_path)
 
-    for id_value in list_ids:
-        # Monte a URL para o ID específico
-        # full_url = f'{base_url}{url_template}'.format(id=id_value)
+    config_table = load_config_file(config_path)
+    table_name = config_table.get('table')
 
-        full_url = build_url(config_data, table_name, log)
-        new_url = full_url.format(id=id_value)
+    if config_table['active']:
+        log.info(f'{table_name} - Iniciando processo de extração...')
+        extraction_date = datetime.now() - timedelta(days=1)
 
-        log.info(f'{table_name} - Buscando dados em: {new_url}')
+        log.info(f'{table_name} - Data de extração: {extraction_date}')
 
-        try:
-            response = requests.get(new_url)
-            if response.status_code == HTTPStatus.OK:
-                data = response.json()
-                all_records.append(data)
-            else:
-                log.error(
-                    f'{table_name} - Falha ao puxar dados para ID -'
-                    f'{id_value}: '
-                    f'{response.status_code}'
-                )
-        except requests.RequestException as e:
-            log.error(
-                f'{table_name} - Erro ao puxar dados para ID {id_value}: {e}'
-            )
+        log.debug(f'{table_name} - Extraindo dados.')
+        data = extract_table(config_table, extraction_date, log)
 
-    return all_records
+        # TODO: adicionar upload_to_blob(data, blob_name, log)
 
-
-def save_to_json(data, file_name, log):
-    """Salva os dados em um arquivo JSON."""
-    try:
-        os.makedirs(
-            '../../../data/deputados/PB/', exist_ok=True
-        )  # Cria a pasta 'output' se não existir
-        file_path = os.path.join('../../../data/deputados/PB/', file_name)
-        with open(file_path, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
-        log.info(f'Dados salvos em: {file_path}')
-    except Exception as e:
-        log.error(f'Erro ao salvar os dados em JSON: {e}')
-
-
-def run_pipeline(config_table_path: str, log, cached_records=None):
-    """Executa a pipeline com base no arquivo de configuração."""
-    log.debug('Carregando configurações das tabelas: %s', config_table_path)
-
-    try:
-        config = load_config_file(config_table_path)
-    except Exception as e:
-        log.error(f'Erro ao carregar arquivo de configuração: {e}')
-        return
-
-    validate_config(config, log)
-
-    table_name = config.get('table', 'Table não especificada')
-
-    if config.get('active', True):
-        records = cached_records
-
-        if table_name == 'deputados':
-            if not records:
-                log.info(f'{table_name} - Extraindo dados...')
-                records = get_deputados(
-                    log, config, table_name, config_table_path
-                )
-                log.info(f'{table_name} - Dados carregados com sucesso.')
-            else:
-                log.info(
-                    f'{table_name} - Usando dados previamente carregados.',
-                )
-
-            # print(json.dumps(records[0], indent=4, ensure_ascii=False))
-            save_to_json(records, f'{table_name}.json', log)
-            df_raw = pd.read_json('../../../data/deputados/PB/deputados.json')
-            print(df_raw.head())
-
-            return records
-
-        if table_name == 'deputados_por_id':
-            log.info(f'{table_name} - Extraindo dados...')
-
-            list_ids = [deputado['id'] for deputado in records]
-            log.info(f'{table_name} - Lista de IDs gerada: %s', list_ids)
-
-            records_id = fetch_records_by_ids(
-                config, list_ids, table_name, log
-            )
-            # print(json.dumps(records_id[0], indent=4, ensure_ascii=False))
-
-            save_to_json(records_id, f'{table_name}.json', log)
-            df_raw = pd.read_json(
-                '../../../data/deputados/PB/deputados_por_id.json'
-            )
-            df_dados_normalizado = json_normalize(df_raw['dados'])
-
-            print(df_dados_normalizado.head())
-
-        else:
-            log.warning(
-                f'{table_name} - Tabela desconhecida ou não especificada.'
-            )
-            return None
+    else:
+        log.warning(
+            'Tabela %s está inativa. Nenhuma extração será realizada.',
+            table_name,
+        )
 
 
 def main():
-    logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.DEBUG,
-    )
-
-    logging.getLogger('urllib3').propagate = False
-    log = logging.getLogger('api-deputados')
+    log = setup_logging()
 
     try:
-        # Obter lista de arquivos de configuração
-        config_files = list_config_files()
-        log.info('Arquivos de configuração encontrados: %s', config_files)
+        table = parse_argument()
 
-        # Priorizar 'deputados.json' se estiver na lista
-        if 'config/deputados.json' in config_files:
-            config_files.remove('config/deputados.json')
-            config_files.insert(0, 'config/deputados.json')
+        config_path = list_config_files(table)
+        if not config_path:
+            log.error(
+                'Arquivo de configuração não encontrado para a tabela: %s',
+                table,
+            )
+            sys.exit(1)
 
-        # Cache para reutilizar registros carregados
-        cached_records = None
+        run_pipeline(config_path, log)
 
-        # Executar a pipeline para cada arquivo de configuração
-        for config_file in config_files:
-            cached_records = run_pipeline(config_file, log, cached_records)
-
-    except FileNotFoundError as e:
-        log.error(e)
+    except Exception as e:
+        log.exception('Erro inesperado: %s', e)
         sys.exit(1)
 
 

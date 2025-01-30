@@ -3,6 +3,7 @@
   "description": "Tabela de deputados",
   "full_table_name": "public.deputados",
   "active": true,
+  "key_data": "dados",
   "endpoint": [
     {
       "base_url": "https://dadosabertos.camara.leg.br/api/v2",

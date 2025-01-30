@@ -3,6 +3,7 @@
   "description": "Tabela de dados dos deputados por id",
   "full_table_name": "public.deputados_por_id",
   "active": true,
+  "key_data": "dados",
   "endpoint": [
     {
       "base_url": "https://dadosabertos.camara.leg.br/api/v2",
