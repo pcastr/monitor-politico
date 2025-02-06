@@ -4,8 +4,10 @@
   "full_table_name": "public.deputados",
   "active": true,
   "key_data": "dados",
+  "depende_de": "",
   "endpoint": [
     {
+      "type": "root",
       "base_url": "https://dadosabertos.camara.leg.br/api/v2",
       "url": "/deputados",
       "parameters": [],
@@ -36,9 +38,7 @@
           "type": "list[str]",
           "required": false,
           "description": "Siglas de unidades federativas (estados e Distrito Federal).",
-          "default": [
-            "PB"
-          ]
+          "default": []
         },
         {
           "name": "siglaPartido",
@@ -66,7 +66,7 @@
           "type": "int",
           "required": false,
           "description": "Número máximo de itens por página.",
-          "default": 100
+          "default": 1000
         },
         {
           "name": "dataInicio",

@@ -6,6 +6,8 @@
   "key_data": "dados",
   "endpoint": [
     {
+      "type": "dependent",
+      "dependent_radical_path": "API_DEPT_deputados",
       "base_url": "https://dadosabertos.camara.leg.br/api/v2",
       "url": "/deputados/{id}",
       "parameters": [

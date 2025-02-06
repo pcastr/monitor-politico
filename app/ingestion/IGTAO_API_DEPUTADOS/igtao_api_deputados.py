@@ -2,18 +2,22 @@ import json
 import logging
 import os
 import sys
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta
+from http import HTTPStatus
 from pathlib import Path
 
 import requests
+from pyspark.sql.functions import col, explode_outer
+from pyspark.sql.types import ArrayType, StructType
 
-DEFAULT_TIMEOUT = 9
+DEFAULT_TIMEOUT = 30
 DEFAULT_RETRIES = 4
-DEFAULT_BACKOFF_FACTOR = 0
+DEFAULT_BACKOFF_FACTOR = 1
 
 
 def setup_logging():
-    """Configura o sistema de logging."""
     log = logging.getLogger('api-deputados')
     log.setLevel(logging.DEBUG)
 
@@ -92,71 +96,140 @@ def build_url(log, config: dict, path_params=None, extra_query_params=None):
         raise ValueError(f'Configuração inválida: {e}')
 
 
-def fetch_records_paginated(log, config_table: dict):
-    all_records = []
-    table_name = config_table.get('table')
-    source_fields = [f['source'].strip() for f in config_table['fields']]
-
-    pagina = 1
-    itens = 1000
-
-    while True:
-        extra_params = {
-            'itens': itens,
-            'pagina': pagina,
-        }
-        url = build_url(log, config_table, extra_query_params=extra_params)
-
-        for attempt in range(DEFAULT_RETRIES):
-            try:
-                response = requests.get(url, timeout=DEFAULT_TIMEOUT)
+def fetch_records(
+    url,
+    log,
+    headers=None,
+    retries=DEFAULT_RETRIES,
+    backoff_factor=DEFAULT_BACKOFF_FACTOR,
+):
+    """Busca registros de uma URL com retentativas e backoff exponencial."""
+    for attempt in range(retries):
+        try:
+            response = requests.get(
+                url, headers=headers
+            )  # Corrigido headers=headers
+            if response.status_code != HTTPStatus.OK:
                 response.raise_for_status()
-                response_data = response.json()
-
-                records = response_data.get(config_table['key_data'], [])
-                all_records.extend(records)
-
-                log.info(
-                    f'{table_name} - Total de registros: %d',
-                    len(all_records),
+            return response
+        except requests.exceptions.RequestException as e:
+            if attempt < retries - 1:
+                sleep_time = backoff_factor * (2**attempt)
+                log.warning(
+                    f'Erro ao buscar registros: {e}. Tentando novamente em '
+                    f'{sleep_time} segundos...'
                 )
+                log.warning(
+                    f'Tentativa {attempt + 1} de {retries}.'
+                )  # Corrigido o número da tentativa
+                time.sleep(
+                    sleep_time
+                )  # Adicionada pausa para evitar requisições excessivas
+            else:
+                log.error(
+                    f'Erro ao buscar registros após {retries} tentativas: {e}'
+                )
+                log.error(f'Falha na URL: {url}')
+                raise e
 
-                if len(records) < itens:
-                    log.info(f'{table_name} - Última página alcançada.')
-                    if isinstance(all_records, list):
-                        filtered_records = [
-                            {
-                                key: item.get(key)
-                                for key in source_fields
-                                if key in item
-                            }
-                            for item in all_records
-                        ]
-                    elif isinstance(all_records, dict):
-                        filtered_records = {
-                            key: all_records.get(key)
-                            for key in source_fields
-                            if key in all_records
-                        }
+
+def get_records_paginated(log, config_table: dict, max_pages=1000):
+    """Coleta registros paginados de uma API."""
+    all_records = []
+    start_page = 1
+    processes = 5
+    empty_page_count = 0
+    max_empty_pages = 3
+
+    while empty_page_count < max_empty_pages and start_page <= max_pages:
+        log.info(
+            f'{config_table["table"]} - Extraindo dados da página {start_page}'
+        )
+        urls = []
+
+        for _ in range(processes):
+            extra_params = {'pagina': start_page}
+            url = build_url(log, config_table, extra_query_params=extra_params)
+            urls.append(url)
+            start_page += 1  # Avança para a próxima página
+
+        with ThreadPoolExecutor(max_workers=processes) as executor:
+            futures = [
+                executor.submit(fetch_records, url, log) for url in urls
+            ]
+
+            for future in as_completed(futures):
+                try:
+                    response = future.result()
+                    result = response.json().get(config_table['key_data'], [])
+
+                    if not result:  # Página vazia
+                        empty_page_count += 1
+                        log.debug(
+                            f'{config_table["table"]} - Página vazia '
+                            f'({empty_page_count}/{max_empty_pages})'
+                        )
                     else:
-                        filtered_records = all_records
+                        empty_page_count = 0  # Reseta contador se houver dados
+                        all_records.extend(result)
+                        log.info(
+                            f'{config_table["table"]} - Registros acumulados: '
+                            f'{len(all_records)}'
+                        )
 
-                    return filtered_records
+                except Exception as exc:
+                    log.error(
+                        f'{config_table["table"]} - Erro ao processar página: '
+                        f'{exc}'
+                    )
+                    raise exc
 
-                pagina += 1
-                break
+    log.info(
+        f'{config_table["table"]} - Extração finalizada com '
+        f'{len(all_records)} registros coletados.'
+    )
+    return all_records
 
-            except requests.exceptions.RequestException as e:
-                log.error('Erro na requisição: %s', e)
-                break
+
+def flatten_df(nested_df):
+    while True:
+        schema = nested_df.schema
+        columns_to_explode = [
+            column.name
+            for column in schema
+            if isinstance(column.dataType, ArrayType)
+        ]
+
+        columns_to_flatten = [
+            column.name
+            for column in schema
+            if isinstance(column.dataType, StructType)
+        ]
+
+        if not columns_to_explode:
+            break
+        for column in columns_to_explode:
+            nested_df = nested_df.withColumn(
+                column, explode_outer(col(column))
+            )
+
+        for column in columns_to_flatten:
+            for field in nested_df.schema[column].dataType.fields:
+                nested_df = nested_df.withColumn(
+                    f'{column}.{field.name}', col(f'{column}.{field.name}')
+                )
+                nested_df = nested_df.drop(column)
+
+    return nested_df
 
 
 def extract_table(config_table: dict, extraction_date: datetime, log):
     try:
-        records = fetch_records_paginated(
-            log,
-            config_table,
-        )
+        if config_table['endpoint'][0]['type'] == 'root':
+            records = get_records_paginated(
+                log,
+                config_table,
+            )
 
     except Exception as e:
         log.error(f'{config_table["table"]} - Erro ao buscar registros: {e}')
