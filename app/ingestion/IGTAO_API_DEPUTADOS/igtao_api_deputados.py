@@ -107,7 +107,7 @@ def fetch_records(
     for attempt in range(retries):
         try:
             response = requests.get(
-                url, headers=headers
+                url, headers=headers, timeout=10
             )  # Corrigido headers=headers
             if response.status_code != HTTPStatus.OK:
                 response.raise_for_status()
@@ -133,8 +133,63 @@ def fetch_records(
                 raise e
 
 
+def get_records_by_id(log, config_table: dict, list_ids: list):
+    """
+    Busca registros por uma lista de IDs usando requisições paralelas.
+
+    :param log: Logger para registrar mensagens.
+    :param config_table: Configuração da tabela com parâmetros necessários.
+    :param list_ids: Lista de IDs a serem buscados.
+    :return: Lista de registros coletados.
+    """
+    start_time = time.time()
+    all_records = []
+    processes = 10
+    log.info(f'{config_table["table"]} - Iniciando extração de dados por ID.')
+
+    urls = [
+        build_url(log, config_table, {'id': id_}) for id_ in list_ids
+    ]  # Cria URLs para cada ID
+
+    with ThreadPoolExecutor(max_workers=processes) as executor:
+        futures = {
+            executor.submit(fetch_records, url, log): url for url in urls
+        }
+
+        for future in as_completed(futures):
+            try:
+                response = future.result()
+                result = [response.json().get(config_table['key_data'], [])]
+
+                if result:
+                    all_records.extend(result)
+                    log.info(
+                        f'{config_table["table"]} - Registros acumulados: '
+                        f'{len(all_records)}'
+                    )
+                else:
+                    log.debug(
+                        f'{config_table["table"]} - Nenhum dado retornado '
+                        f'para um ID.'
+                    )
+
+            except Exception as exc:
+                log.error(
+                    f'{config_table["table"]} - Erro ao buscar dados: {exc}'
+                )
+
+    elapsed_time = time.time() - start_time
+    log.info(
+        f'{config_table["table"]} - Extração finalizada com '
+        f'{len(all_records)} registros coletados. '
+        f'Tempo total: {elapsed_time:.2f} segundos.'
+    )
+    return all_records
+
+
 def get_records_paginated(log, config_table: dict, max_pages=1000):
     """Coleta registros paginados de uma API."""
+    start_time = time.time()
     all_records = []
     start_page = 1
     processes = 5
@@ -143,15 +198,18 @@ def get_records_paginated(log, config_table: dict, max_pages=1000):
 
     while empty_page_count < max_empty_pages and start_page <= max_pages:
         log.info(
-            f'{config_table["table"]} - Extraindo dados da página {start_page}'
+            f'{config_table["table"]} - Extraindo dados das páginas '
+            f'{start_page} a {start_page + processes - 1}'
         )
         urls = []
 
         for _ in range(processes):
+            if start_page > max_pages:
+                break
             extra_params = {'pagina': start_page}
             url = build_url(log, config_table, extra_query_params=extra_params)
             urls.append(url)
-            start_page += 1  # Avança para a próxima página
+            start_page += 1
 
         with ThreadPoolExecutor(max_workers=processes) as executor:
             futures = [
@@ -184,9 +242,10 @@ def get_records_paginated(log, config_table: dict, max_pages=1000):
                     )
                     raise exc
 
+    elapsed_time = time.time() - start_time
     log.info(
-        f'{config_table["table"]} - Extração finalizada com '
-        f'{len(all_records)} registros coletados.'
+        f'{config_table["table"]} - Extração finalizada com {len(all_records)} registros coletados. '
+        f'Tempo total: {elapsed_time:.2f} segundos.'
     )
     return all_records
 
@@ -231,12 +290,43 @@ def extract_table(config_table: dict, extraction_date: datetime, log):
                 config_table,
             )
 
+        if config_table['endpoint'][0]['type'] == 'dependent':
+            dir_path = '../../../data/deputados/PB/'
+            radical = config_table['endpoint'][0]['dependent_radical_path']
+
+            root_json = find_json(dir_path, radical)
+
+            with open(root_json, 'r', encoding='utf-8') as f:
+                dados_json = json.load(f)
+                lista_ids = [int(deputado['id']) for deputado in dados_json]
+
+            print(lista_ids)
+            records = get_records_by_id(log, config_table, lista_ids)
+
     except Exception as e:
         log.error(f'{config_table["table"]} - Erro ao buscar registros: {e}')
 
     log.info(f'{config_table["table"]} - Registros extraídos: {len(records)}')
     data = '\n'.join([json.dumps(row) for row in records])
     return data
+
+
+def find_json(dir_path: str, radical: str):
+    """
+    Busca um arquivo JSON dentro de uma pasta que contenha um radical
+    específico no nome.
+
+    :param pasta: Caminho da pasta onde procurar.
+    :param radical: Palavra-chave que deve estar presente no nome do arquivo.
+    :return: Caminho completo do primeiro arquivo encontrado ou None se não
+    houver correspondência.
+    """
+    if not os.path.isdir(dir_path):
+        raise ValueError(f"O caminho '{dir_path}' não é um diretório válido.")
+
+    for file in os.listdir(dir_path):
+        if radical in file and file.endswith('.json'):
+            return os.path.join(dir_path, file)
 
 
 def save_to_json(data, file_name, table_name, log):
